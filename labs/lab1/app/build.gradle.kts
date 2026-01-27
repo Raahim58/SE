@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myapplication"
+    namespace = "com.example.lonelyTwitter"
     compileSdk {
         version = release(36)
     }

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.lonelyTwitter;
 
 import android.content.Context;
 
