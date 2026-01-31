@@ -35,8 +35,8 @@ public class FirstFragment extends Fragment {
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//
+        super.onViewCreated(view, savedInstanceState);
+
 //        binding.buttonFirst.setOnClickListener(v ->
 //                NavHostFragment.findNavController(FirstFragment.this)
 //                        .navigate(R.id.action_FirstFragment_to_SecondFragment)
@@ -45,8 +45,12 @@ public class FirstFragment extends Fragment {
         view.findViewById(R.id.random_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+//                NavHostFragment.findNavController(FirstFragment.this)
+//                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                // Get the value of the text view
+                int currentCount = Integer.parseInt(showCountTextView.getText().toString()); // gets whats displayed converting to string and then int
+                FirstFragmentDirections.ActionFirstFragmentToSecondFragment action = FirstFragmentDirections.actionFirstFragmentToSecondFragment(currentCount); // create nav action with safe args
+                NavHostFragment.findNavController(FirstFragment.this).navigate(action); // navigate to second fragment
             }
         });
 

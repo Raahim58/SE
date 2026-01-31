@@ -4,12 +4,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+//import androidx.navigation.fragment.navArgs;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myfirstapp.databinding.FragmentSecondBinding;
+
+import java.util.Random;
 
 public class SecondFragment extends Fragment {
 
@@ -29,6 +34,25 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Integer count = SecondFragmentArgs.fromBundle(getArguments()).getMyArg(); // get count
+        String countText = getString(R.string.random_heading, count); // get string
+        TextView headerView = binding.textviewHeader;
+//        TextView headerView = view.getRootView().findViewById(R.id.textview_header); // format string with count
+        headerView.setText(countText); // set for textview_header
+
+        // get a random number between 0 and count
+        Random random = new java.util.Random();
+        Integer randomNumber = 0;
+        if (count > 0) {
+            randomNumber = random.nextInt(count + 1);
+        }
+
+        // convert number to string and set it as text for textview_random
+//        TextView randomView = view.getRootView().findViewById(R.id.textview_random);
+        TextView randomView = binding.textviewRandom;
+        randomView.setText(randomNumber.toString());
+
+        // to go back to first fragment
         binding.buttonSecond.setOnClickListener(v ->
                 NavHostFragment.findNavController(SecondFragment.this)
                         .navigate(R.id.action_SecondFragment_to_FirstFragment)
