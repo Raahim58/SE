@@ -15,15 +15,12 @@ public class SummaryRow {
         this.count = count;
         this.fraction = fraction;
     }
-
     public EmotionType getEmotionType() {
         return emotionType;
     }
-
     public int getCount() {
         return count;
     }
-
     public double getFraction() {
         return fraction;
     }
