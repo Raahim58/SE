@@ -18,10 +18,9 @@ import java.util.List;
 
 /*
   logs screen (emotion events screen).
-  now it's daily: you can browse day by day using prev/next.
+  can browse day by day using prev/next.
 */
 public class LogsActivity extends AppCompatActivity {
-
     private LogRepository repo;
     private LogsAdapter adapter;
     private LocalDate selectedDate;
@@ -35,45 +34,40 @@ public class LogsActivity extends AppCompatActivity {
         // setup toolbar as action bar
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         // enable back arrow
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        repo = LogRepository.getInstance();
+        repo = LogRepository.getInstance(); // get logs from repository
         selectedDate = LocalDate.now();
         txtDate = findViewById(R.id.txtLogsDate);
         txtCount = findViewById(R.id.txtLogsCount);
-
         Button btnPrev = findViewById(R.id.btnLogsPrev);
         Button btnNext = findViewById(R.id.btnLogsNext);
 
+        // recycler view for scrollable list of logs
         RecyclerView recycler = findViewById(R.id.recyclerLogs);
         recycler.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new LogsAdapter();
+        adapter = new LogsAdapter(); // tells what to display for each log
         recycler.setAdapter(adapter);
 
+        // navigate different dates
         btnPrev.setOnClickListener(v -> {
             selectedDate = selectedDate.minusDays(1);
             refresh();
         });
-
         btnNext.setOnClickListener(v -> {
             selectedDate = selectedDate.plusDays(1);
             refresh();
         });
-
         refresh();
     }
 
     private void refresh() {
         txtDate.setText("date: " + DateUtils.formatDate(selectedDate));
-
         List<LogEntry> logsForDay = repo.getForDay(selectedDate);
         txtCount.setText("total: " + logsForDay.size());
-
-        adapter.setItems(logsForDay);
+        adapter.setItems(logsForDay); // clear old data, add new data, recyclerview refreshed
     }
 
     @Override

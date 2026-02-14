@@ -14,55 +14,43 @@ import java.util.List;
 import java.util.Locale;
 
 /*
-  adapter for the summary list.
-  each row shows emotion + count + percent.
+  adapter for the summary list -> each row shows emotion + count + percent.
+  almost same function and usage as logsAdapter -> controls how one row looks and how data binds to views
 */
 public class SummaryAdapter extends RecyclerView.Adapter<SummaryAdapter.SummaryVH> {
-
-    private final List<SummaryRow> items = new ArrayList<>();
-    private final NumberFormat pct = NumberFormat.getPercentInstance(Locale.getDefault());
-
+    private List<SummaryRow> items = new ArrayList<>();
+    private NumberFormat pct = NumberFormat.getPercentInstance(Locale.getDefault());
     public SummaryAdapter() {
         pct.setMaximumFractionDigits(0); // 41% not 41.6666%
     }
-
     public void setItems(List<SummaryRow> rows) {
         items.clear();
         items.addAll(rows);
         notifyDataSetChanged();
     }
-
+    // create a row
     @NonNull
     @Override
     public SummaryVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View row = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_summary, parent, false);
+        View row = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_summary, parent, false);
         return new SummaryVH(row);
     }
-
+    // fill the row with data
     @Override
     public void onBindViewHolder(@NonNull SummaryVH holder, int position) {
         SummaryRow r = items.get(position);
-
-        holder.txtEmotion.setText(
-                r.getEmotionType().getEmoji() + " " + r.getEmotionType().getLabel()
-        );
-
+        holder.txtEmotion.setText(r.getEmotionType().getEmoji() + " " + r.getEmotionType().getLabel());
         holder.txtCount.setText(String.valueOf(r.getCount()));
         holder.txtPercent.setText(pct.format(r.getFraction()));
     }
-
     @Override
     public int getItemCount() {
         return items.size();
     }
-
     static class SummaryVH extends RecyclerView.ViewHolder {
-
         TextView txtEmotion;
         TextView txtCount;
         TextView txtPercent;
-
         SummaryVH(@NonNull View itemView) {
             super(itemView);
             txtEmotion = itemView.findViewById(R.id.txtSummaryEmotion);

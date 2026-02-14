@@ -93,49 +93,46 @@ import java.time.Instant;
   logs are stored in LogRepository.
 */
 public class MainActivity extends AppCompatActivity {
-
     private LogRepository repo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         repo = LogRepository.getInstance();
 
+        // find buttons
         Button btnHappy = findViewById(R.id.btnHappy);
         Button btnSad = findViewById(R.id.btnSad);
         Button btnGrateful = findViewById(R.id.btnGrateful);
         Button btnAngry = findViewById(R.id.btnAngry);
         Button btnExcited = findViewById(R.id.btnExcited);
         Button btnStressed = findViewById(R.id.btnStressed);
-
         Button btnViewLogs = findViewById(R.id.btnViewLogs);
         Button btnViewSummary = findViewById(R.id.btnViewSummary);
 
+        // listen for button clicks
         btnHappy.setOnClickListener(v -> logEmotion(EmotionType.HAPPY));
         btnSad.setOnClickListener(v -> logEmotion(EmotionType.SAD));
         btnGrateful.setOnClickListener(v -> logEmotion(EmotionType.GRATEFUL));
         btnAngry.setOnClickListener(v -> logEmotion(EmotionType.ANGRY));
         btnExcited.setOnClickListener(v -> logEmotion(EmotionType.EXCITED));
         btnStressed.setOnClickListener(v -> logEmotion(EmotionType.STRESSED));
-
+        // head to log screen
         btnViewLogs.setOnClickListener(v -> {
             Intent i = new Intent(MainActivity.this, LogsActivity.class);
             startActivity(i);
         });
-
+        // head to summary screen
         btnViewSummary.setOnClickListener(v -> {
             Intent i = new Intent(MainActivity.this, SummaryActivity.class);
             startActivity(i);
         });
 
     }
-
+    // add emotion pressed, show that it was logged
     private void logEmotion(EmotionType type) {
         repo.add(new LogEntry(type, Instant.now()));
-        Toast.makeText(this,
-                "logged " + type.getEmoji() + " " + type.getLabel(),
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "logged " + type.getEmoji() + " " + type.getLabel(), Toast.LENGTH_SHORT).show();
     }
 }
