@@ -1,0 +1,84 @@
+package com.example.emotions;
+
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.emotions.DateUtils;
+import com.example.emotions.LogEntry;
+import com.example.emotions.LogRepository;
+import com.example.emotions.LogsAdapter;
+
+import java.time.LocalDate;
+import java.util.List;
+
+/*
+  logs screen (emotion events screen).
+  now it's daily: you can browse day by day using prev/next.
+*/
+public class LogsActivity extends AppCompatActivity {
+
+    private LogRepository repo;
+    private LogsAdapter adapter;
+    private LocalDate selectedDate;
+    private TextView txtDate;
+    private TextView txtCount;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_logs);
+
+        // show back arrow in the top bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        repo = LogRepository.getInstance();
+        selectedDate = LocalDate.now();
+        txtDate = findViewById(R.id.txtLogsDate);
+        txtCount = findViewById(R.id.txtLogsCount);
+
+        Button btnPrev = findViewById(R.id.btnLogsPrev);
+        Button btnNext = findViewById(R.id.btnLogsNext);
+
+        RecyclerView recycler = findViewById(R.id.recyclerLogs);
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new LogsAdapter();
+        recycler.setAdapter(adapter);
+
+        btnPrev.setOnClickListener(v -> {
+            selectedDate = selectedDate.minusDays(1);
+            refresh();
+        });
+
+        btnNext.setOnClickListener(v -> {
+            selectedDate = selectedDate.plusDays(1);
+            refresh();
+        });
+
+        refresh();
+    }
+
+    private void refresh() {
+        txtDate.setText("date: " + DateUtils.formatDate(selectedDate));
+
+        List<LogEntry> logsForDay = repo.getForDay(selectedDate);
+        txtCount.setText("total: " + logsForDay.size());
+
+        adapter.setItems(logsForDay);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        // same as pressing the system back button
+        finish();
+        return true;
+    }
+}
+
+
