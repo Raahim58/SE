@@ -1,5 +1,6 @@
 package com.example.lab08;
 
+// hi my name is a city
 public class City {
     private String city;
     private String province;
